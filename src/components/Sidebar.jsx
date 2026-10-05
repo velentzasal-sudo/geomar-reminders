@@ -1,59 +1,92 @@
 import { Link, useLocation } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+
 export default function Sidebar() {
   const location = useLocation();
 
   const linkClass = (path) =>
-    `block p-3 rounded-xl transition ${
+    `flex items-center gap-3 p-3 rounded-xl transition ${
       location.pathname === path
-        ? "bg-orange-500 text-white"
-        : "hover:bg-slate-800"
+        ? "bg-orange-500 text-white shadow-lg"
+        : "text-slate-300 hover:bg-slate-800 hover:text-white"
     }`;
 
+  const logout = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
-    
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 p-5">
-      <h1 className="text-3xl font-bold mb-10">
-        GEOMAR CRM
-      </h1>
-<button
-  onClick={() =>
-    supabase.auth.signOut()
-  }
-  className="w-full mt-4 bg-red-600 hover:bg-red-700 p-3 rounded-xl"
->
-  🚪 Logout
-</button>
-      <nav className="space-y-2">
+    <aside className="w-72 bg-slate-900 border-r border-slate-800 flex flex-col">
+
+      <div className="p-6 border-b border-slate-800">
+        <h1 className="text-3xl font-bold text-white">
+          GEOMAR CRM
+        </h1>
+
+        <p className="text-slate-400 text-sm mt-1">
+          Customer Management
+        </p>
+      </div>
+
+      <nav className="p-4 space-y-2">
 
         <Link
           to="/"
           className={linkClass("/")}
         >
-          🏠 Dashboard
+          <span className="text-xl">🏠</span>
+          <span>Dashboard</span>
         </Link>
 
         <Link
           to="/customers"
           className={linkClass("/customers")}
         >
-          👥 Πελάτες
+          <span className="text-xl">👥</span>
+          <span>Πελάτες</span>
         </Link>
 
         <Link
           to="/calendar"
           className={linkClass("/calendar")}
         >
-          📅 Ημερολόγιο
+          <span className="text-xl">📅</span>
+          <span>Ημερολόγιο</span>
         </Link>
 
       </nav>
 
-      <div className="mt-10 border-t border-slate-800 pt-4">
-        <p className="text-slate-500 text-sm">
-          Geomar CRM v1.0
-        </p>
+      <div className="mt-auto p-4 border-t border-slate-800">
+
+        <button
+          onClick={logout}
+          className="
+            w-full
+            bg-red-600
+            hover:bg-red-700
+            transition
+            rounded-xl
+            py-3
+            font-semibold
+            text-white
+          "
+        >
+          🚪 Αποσύνδεση
+        </button>
+
+        <div className="mt-4 text-center">
+          <p className="text-slate-500 text-xs">
+            Geomar CRM
+          </p>
+
+          <p className="text-slate-600 text-xs">
+            Powered by Supabase
+          </p>
+        </div>
+
       </div>
+
     </aside>
   );
 }
+``
