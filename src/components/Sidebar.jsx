@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-
+import { supabase } from "../lib/supabase";
 export default function Sidebar() {
   const location = useLocation();
 
@@ -11,11 +11,19 @@ export default function Sidebar() {
     }`;
 
   return (
+    
     <aside className="w-64 bg-slate-900 border-r border-slate-800 p-5">
       <h1 className="text-3xl font-bold mb-10">
         GEOMAR CRM
       </h1>
-
+<button
+  onClick={() =>
+    supabase.auth.signOut()
+  }
+  className="w-full mt-4 bg-red-600 hover:bg-red-700 p-3 rounded-xl"
+>
+  🚪 Logout
+</button>
       <nav className="space-y-2">
 
         <Link
