@@ -205,25 +205,48 @@ export default function CustomerForm({
         }
       );
 
-    for (const customerData of importedCustomers) {
-   await supabase
-    .from("customers")
-    .insert([
-      {
-        customer:
-          customerData.customer,
+   for (const customerData of importedCustomers) {
 
+  const existingCustomer =
+    records.find(
+      (c) =>
+        c.customer
+          .trim()
+          .toLowerCase() ===
+        customerData.customer
+          .trim()
+          .toLowerCase()
+    );
+
+  if (existingCustomer) {
+
+    await supabase
+      .from("customers")
+      .update({
         total_debt:
           customerData.totalDebt,
+      })
+      .eq(
+        "id",
+        existingCustomer.id
+      );
 
-        next_card_date: null,
+  } else {
 
-        monthly_card_repeat:
-          false,
+    await supabase
+      .from("customers")
+      .insert([
+        {
+          customer:
+            customerData.customer,
 
-        notes: "",
-      },
-    ]);
+          total_debt:
+            customerData.totalDebt,
+        },
+      ]);
+
+  }
+
 }
 
 setRecords(updatedRecords);
