@@ -128,21 +128,16 @@ if (!customer) {
       }
     );
 
-  const totalPaid =
-payments.reduce(
-      (sum, payment) =>
-        sum +
-        Number(payment.amount || 0),
-      0
-    );
+ const totalPaid =
+  payments.reduce(
+    (sum, payment) =>
+      sum +
+      Number(payment.amount || 0),
+    0
+  );
 
-  const remainingDebt =
-    Math.max(
-      0,
-      Number(customer.totalDebt || 0) -
-        Number(totalPaid || 0)
-    );
- 
+const remainingDebt =
+  Number(customer.totalDebt || 0);
 
 const addPayment = async () => {
   if (
@@ -394,30 +389,20 @@ const deleteExpectedPayment =
 
         <div className="flex flex-wrap gap-3">
 
-          <div className="bg-orange-500 px-4 py-2 rounded-xl">
-            💰 Χρέος:
-            {" "}
-            {formatMoney(
-              customer.totalDebt
-            )}
-            €
-          </div>
+         <div className="bg-orange-500 px-4 py-2 rounded-xl">
+  💸 Τρέχον Υπόλοιπο:
+  {formatMoney(customer.totalDebt)} €
+</div>
 
-          <div className="bg-green-600 px-4 py-2 rounded-xl">
-            ✅ Πληρωμένα:
-            {" "}
-            {formatMoney(totalPaid)}
-            €
-          </div>
+<div className="bg-green-600 px-4 py-2 rounded-xl">
+  ✅ Πληρωμές CRM:
+  {formatMoney(totalPaid)} €
+</div>
 
-          <div className="bg-red-600 px-4 py-2 rounded-xl">
-            💸 Υπόλοιπο:
-            {" "}
-            {formatMoney(
-              remainingDebt
-            )}
-            €
-          </div>
+<div className="bg-blue-600 px-4 py-2 rounded-xl">
+  📨 Καρτέλα:
+  {customer.nextCardDate || "Δεν ορίστηκε"}
+</div>
 
           <div className="bg-blue-600 px-4 py-2 rounded-xl">
             📨 Καρτέλα:

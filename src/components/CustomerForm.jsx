@@ -206,6 +206,7 @@ export default function CustomerForm({
       );
 
   for (const customerData of importedCustomers) {
+
   const existingCustomer =
     records.find(
       (c) =>
@@ -218,6 +219,7 @@ export default function CustomerForm({
     );
 
   if (existingCustomer) {
+
     const { error } =
       await supabase
         .from("customers")
@@ -235,6 +237,7 @@ export default function CustomerForm({
     }
 
   } else {
+
     const { error } =
       await supabase
         .from("customers")
@@ -245,6 +248,13 @@ export default function CustomerForm({
 
             total_debt:
               customerData.totalDebt,
+
+            next_card_date: null,
+
+            monthly_card_repeat:
+              false,
+
+            notes: "",
           },
         ]);
 
@@ -253,14 +263,24 @@ export default function CustomerForm({
     }
   }
 }
+const { data } =
+  await supabase
+    .from("customers")
+    .select("*")
+    .order("customer");
 
-setRecords(updatedRecords);
-    };
+const mappedCustomers =
+  (data || []).map((row) => ({
+    ...row,
+    totalDebt:
+      row.total_debt,
+    nextCardDate:
+      row.next_card_date,
+    monthlyCardRepeat:
+      row.monthly_card_repeat,
+  }));
 
-    reader.readAsBinaryString(
-      file
-    );
-  };
+setRecords(mappedCustomers);
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
