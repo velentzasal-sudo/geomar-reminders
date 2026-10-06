@@ -167,43 +167,7 @@ export default function CustomerForm({
           expectedPayments: [],
         }));
 
-      const updatedRecords = [
-        ...records,
-      ];
-
-      importedCustomers.forEach(
-        (importedCustomer) => {
-          const existingIndex =
-            updatedRecords.findIndex(
-              (c) =>
-                c.customer
-                  .trim()
-                  .toLowerCase() ===
-                importedCustomer.customer
-                  .trim()
-                  .toLowerCase()
-            );
-
-          if (
-            existingIndex !== -1
-          ) {
-            updatedRecords[
-              existingIndex
-            ] = {
-              ...updatedRecords[
-                existingIndex
-              ],
-
-              totalDebt:
-                importedCustomer.totalDebt,
-            };
-          } else {
-            updatedRecords.push(
-              importedCustomer
-            );
-          }
-        }
-      );
+      
 
   for (const customerData of importedCustomers) {
 
@@ -281,7 +245,10 @@ const mappedCustomers =
   }));
 
 setRecords(mappedCustomers);
+    };
 
+    reader.readAsBinaryString(file);
+  };
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
       <h2 className="text-2xl font-bold mb-4">
