@@ -205,8 +205,7 @@ export default function CustomerForm({
         }
       );
 
-   for (const customerData of importedCustomers) {
-
+  for (const customerData of importedCustomers) {
   const existingCustomer =
     records.find(
       (c) =>
@@ -219,34 +218,40 @@ export default function CustomerForm({
     );
 
   if (existingCustomer) {
-
-    await supabase
-      .from("customers")
-      .update({
-        total_debt:
-          customerData.totalDebt,
-      })
-      .eq(
-        "id",
-        existingCustomer.id
-      );
-
-  } else {
-
-    await supabase
-      .from("customers")
-      .insert([
-        {
-          customer:
-            customerData.customer,
-
+    const { error } =
+      await supabase
+        .from("customers")
+        .update({
           total_debt:
             customerData.totalDebt,
-        },
-      ]);
+        })
+        .eq(
+          "id",
+          existingCustomer.id
+        );
 
+    if (error) {
+      console.error(error);
+    }
+
+  } else {
+    const { error } =
+      await supabase
+        .from("customers")
+        .insert([
+          {
+            customer:
+              customerData.customer,
+
+            total_debt:
+              customerData.totalDebt,
+          },
+        ]);
+
+    if (error) {
+      console.error(error);
+    }
   }
-
 }
 
 setRecords(updatedRecords);
