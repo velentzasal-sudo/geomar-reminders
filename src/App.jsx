@@ -74,6 +74,8 @@ function App() {
       .from("expected_payments")
       .select("*");
 
+console.log("EXPECTED", expectedPayments);
+
     if (expectedError) {
       console.error(expectedError);
       return;
