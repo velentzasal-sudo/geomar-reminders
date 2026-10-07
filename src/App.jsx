@@ -17,16 +17,14 @@ function App() {
     useState(null);
 
   useEffect(() => {
-    loadCustomers();
+    loadData();
   }, []);
 
   useEffect(() => {
     supabase.auth
       .getSession()
       .then(({ data }) => {
-        setSession(
-          data.session
-        );
+        setSession(data.session);
       });
 
     const {
@@ -43,37 +41,96 @@ function App() {
     };
   }, []);
 
-  const loadCustomers = async () => {
-    const { data, error } =
-      await supabase
-        .from("customers")
-        .select("*")
-        .order("customer");
+  const loadData = async () => {
+    const {
+      data: customers,
+      error: customerError,
+    } = await supabase
+      .from("customers")
+      .select("*")
+      .order("customer");
 
-    if (error) {
-      console.error(error);
+    if (customerError) {
+      console.error(customerError);
+      return;
+    }
+
+    const {
+      data: payments,
+      error: paymentsError,
+    } = await supabase
+      .from("payments")
+      .select("*");
+
+    if (paymentsError) {
+      console.error(paymentsError);
+      return;
+    }
+
+    const {
+      data: expectedPayments,
+      error: expectedError,
+    } = await supabase
+      .from("expected_payments")
+      .select("*");
+
+    if (expectedError) {
+      console.error(expectedError);
       return;
     }
 
     const mappedCustomers =
-      (data || []).map(
-        (row) => ({
-          ...row,
+      (customers || []).map(
+        (customer) => {
 
-          totalDebt:
-            row.total_debt,
+          const customerPayments =
+            (payments || [])
+              .filter(
+                (p) =>
+                  p.customer_id ===
+                  customer.id
+              )
+              .map((p) => ({
+                id: p.id,
+                amount: p.amount,
+                date: p.payment_date,
+              }));
 
-          nextCardDate:
-            row.next_card_date,
+          const customerExpectedPayments =
+            (expectedPayments || [])
+              .filter(
+                (p) =>
+                  p.customer_id ===
+                  customer.id
+              )
+              .map((p) => ({
+                id: p.id,
+                amount: p.amount,
+                date: p.payment_date,
+              }));
 
-          monthlyCardRepeat:
-            row.monthly_card_repeat,
-        })
+          return {
+            ...customer,
+
+            totalDebt:
+              customer.total_debt,
+
+            nextCardDate:
+              customer.next_card_date,
+
+            monthlyCardRepeat:
+              customer.monthly_card_repeat,
+
+            payments:
+              customerPayments,
+
+            expectedPayments:
+              customerExpectedPayments,
+          };
+        }
       );
 
-    setRecords(
-      mappedCustomers
-    );
+    setRecords(mappedCustomers);
   };
 
   if (!session) {
@@ -104,9 +161,7 @@ function App() {
               element={
                 <Customers
                   records={records}
-                  setRecords={
-                    setRecords
-                  }
+                  setRecords={setRecords}
                 />
               }
             />
@@ -125,9 +180,7 @@ function App() {
               element={
                 <CustomerDetails
                   records={records}
-                  setRecords={
-                    setRecords
-                  }
+                  setRecords={setRecords}
                 />
               }
             />
