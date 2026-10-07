@@ -155,8 +155,8 @@ export default function DashboardCards({
               <span>📨</span>
 
               <span className="font-semibold">
-                Καρτέλες Σήμερα
-              </span>
+Επερχόμενες Καρτέλες
+</span>
 
               <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
                 {todayCards.length}
