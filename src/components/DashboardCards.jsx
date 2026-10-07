@@ -6,18 +6,14 @@ export default function DashboardCards({
 }) {
   const navigate = useNavigate();
 
-  const [showCards, setShowCards] =
+  const [showExpected, setShowExpected] =
     useState(true);
 
-  const [
-    showExpected,
-    setShowExpected,
-  ] = useState(true);
+  const [showOverdue, setShowOverdue] =
+    useState(false);
 
-  const [
-    showOverdue,
-    setShowOverdue,
-  ] = useState(false);
+  const [showUpcoming, setShowUpcoming] =
+    useState(false);
 
   const today =
     new Date()
@@ -40,54 +36,51 @@ export default function DashboardCards({
     records.reduce(
       (sum, r) =>
         sum +
-        Number(
-          r.totalDebt || 0
-        ),
+        Number(r.totalDebt || 0),
       0
     );
 
-  const todayCards =
-    records.filter(
-      (c) =>
-        c.nextCardDate === today
-    );
+  const upcomingCards =
+    records
+      .filter(
+        (customer) =>
+          customer.nextCardDate &&
+          customer.nextCardDate >= today
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.nextCardDate) -
+          new Date(b.nextCardDate)
+      );
 
   const expectedPayments =
     records.flatMap(
       (customer) =>
-        (customer.expectedPayments ||
-          [])
+        (customer.expectedPayments || [])
           .filter(
             (payment) =>
-              payment.date >=
-              today
+              payment.date >= today
           )
-          .map(
-            (payment) => ({
-              customer:
-                customer.customer,
-              ...payment,
-            })
-          )
+          .map((payment) => ({
+            customer:
+              customer.customer,
+            ...payment,
+          }))
     );
 
   const overduePayments =
     records.flatMap(
       (customer) =>
-        (customer.expectedPayments ||
-          [])
+        (customer.expectedPayments || [])
           .filter(
             (payment) =>
-              payment.date <
-              today
+              payment.date < today
           )
-          .map(
-            (payment) => ({
-              customer:
-                customer.customer,
-              ...payment,
-            })
-          )
+          .map((payment) => ({
+            customer:
+              customer.customer,
+            ...payment,
+          }))
     );
 
   return (
@@ -96,21 +89,21 @@ export default function DashboardCards({
 
         <div className="bg-slate-900 rounded-3xl p-6">
           <p className="text-slate-400 text-sm">
-            Καρτέλες Σήμερα
-          </p>
-
-          <h2 className="text-3xl font-bold mt-2">
-            {todayCards.length}
-          </h2>
-        </div>
-
-        <div className="bg-slate-900 rounded-3xl p-6">
-          <p className="text-slate-400 text-sm">
             Αναμενόμενες
           </p>
 
           <h2 className="text-3xl font-bold mt-2">
             {expectedPayments.length}
+          </h2>
+        </div>
+
+        <div className="bg-slate-900 rounded-3xl p-6">
+          <p className="text-slate-400 text-sm">
+            Καρτέλες
+          </p>
+
+          <h2 className="text-3xl font-bold mt-2">
+            {upcomingCards.length}
           </h2>
         </div>
 
@@ -130,81 +123,13 @@ export default function DashboardCards({
           </p>
 
           <h2 className="text-3xl font-bold mt-2">
-            {formatMoney(
-              totalAmount
-            )}
+            {formatMoney(totalAmount)}
           </h2>
         </div>
 
       </div>
 
       <div className="space-y-4">
-
-        <div className="bg-slate-900 rounded-3xl p-5">
-
-          <button
-            onClick={() =>
-              setShowCards(
-                !showCards
-              )
-            }
-            className="w-full flex justify-between items-center"
-          >
-            <div className="flex items-center gap-3">
-
-              <span>📨</span>
-
-              <span className="font-semibold">
-Επερχόμενες Καρτέλες
-</span>
-
-              <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
-                {todayCards.length}
-              </span>
-
-            </div>
-
-            <span className="text-slate-500">
-              {showCards
-                ? "−"
-                : "+"}
-            </span>
-          </button>
-
-          {showCards && (
-            <div className="mt-4 space-y-2">
-
-              {todayCards.length === 0 ? (
-                <p className="text-slate-400">
-                  Δεν υπάρχουν καρτέλες σήμερα.
-                </p>
-              ) : (
-                todayCards.map(
-                  (
-                    customer,
-                    index
-                  ) => (
-                    <div
-                      key={index}
-                      onClick={() =>
-                        navigate(
-                          `/customers/${encodeURIComponent(
-                            customer.customer
-                          )}`
-                        )
-                      }
-                      className="bg-slate-800 hover:bg-slate-700 rounded-xl p-3 cursor-pointer transition"
-                    >
-                      {customer.customer}
-                    </div>
-                  )
-                )
-              )}
-
-            </div>
-          )}
-
-        </div>
 
         <div className="bg-slate-900 rounded-3xl p-5">
 
@@ -224,7 +149,14 @@ export default function DashboardCards({
                 Αναμενόμενες Πληρωμές
               </span>
 
-              <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
+              <span className="
+                bg-slate-800
+                text-slate-400
+                text-xs
+                px-2
+                py-1
+                rounded-full
+              ">
                 {
                   expectedPayments.length
                 }
@@ -237,6 +169,7 @@ export default function DashboardCards({
                 ? "−"
                 : "+"}
             </span>
+
           </button>
 
           {showExpected && (
@@ -248,10 +181,7 @@ export default function DashboardCards({
                 </p>
               ) : (
                 expectedPayments.map(
-                  (
-                    payment,
-                    index
-                  ) => (
+                  (payment, index) => (
                     <div
                       key={index}
                       onClick={() =>
@@ -261,12 +191,17 @@ export default function DashboardCards({
                           )}`
                         )
                       }
-                      className="bg-slate-800 hover:bg-slate-700 rounded-xl p-3 cursor-pointer transition"
+                      className="
+                        bg-slate-800
+                        hover:bg-slate-700
+                        rounded-xl
+                        p-3
+                        cursor-pointer
+                        transition
+                      "
                     >
                       <div className="font-medium">
-                        {
-                          payment.customer
-                        }
+                        {payment.customer}
                       </div>
 
                       <div className="text-sm text-slate-400">
@@ -275,10 +210,9 @@ export default function DashboardCards({
                         )}
                         €
                         {" • "}
-                        {
-                          payment.date
-                        }
+                        {payment.date}
                       </div>
+
                     </div>
                   )
                 )
@@ -307,7 +241,14 @@ export default function DashboardCards({
                 Ληξιπρόθεσμες Πληρωμές
               </span>
 
-              <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
+              <span className="
+                bg-slate-800
+                text-slate-400
+                text-xs
+                px-2
+                py-1
+                rounded-full
+              ">
                 {
                   overduePayments.length
                 }
@@ -320,6 +261,7 @@ export default function DashboardCards({
                 ? "−"
                 : "+"}
             </span>
+
           </button>
 
           {showOverdue && (
@@ -331,10 +273,7 @@ export default function DashboardCards({
                 </p>
               ) : (
                 overduePayments.map(
-                  (
-                    payment,
-                    index
-                  ) => (
+                  (payment, index) => (
                     <div
                       key={index}
                       onClick={() =>
@@ -344,12 +283,17 @@ export default function DashboardCards({
                           )}`
                         )
                       }
-                      className="bg-slate-800 hover:bg-slate-700 rounded-xl p-3 cursor-pointer transition"
+                      className="
+                        bg-slate-800
+                        hover:bg-slate-700
+                        rounded-xl
+                        p-3
+                        cursor-pointer
+                        transition
+                      "
                     >
                       <div className="font-medium">
-                        {
-                          payment.customer
-                        }
+                        {payment.customer}
                       </div>
 
                       <div className="text-sm text-slate-400">
@@ -358,10 +302,98 @@ export default function DashboardCards({
                         )}
                         €
                         {" • "}
+                        {payment.date}
+                      </div>
+                    </div>
+                  )
+                )
+              )}
+
+            </div>
+          )}
+
+        </div>
+
+        <div className="bg-slate-900 rounded-3xl p-5">
+
+          <button
+            onClick={() =>
+              setShowUpcoming(
+                !showUpcoming
+              )
+            }
+            className="w-full flex justify-between items-center"
+          >
+            <div className="flex items-center gap-3">
+
+              <span>🔔</span>
+
+              <span className="font-semibold">
+                Επερχόμενες Καρτέλες
+              </span>
+
+              <span className="
+                bg-slate-800
+                text-slate-400
+                text-xs
+                px-2
+                py-1
+                rounded-full
+              ">
+                {upcomingCards.length}
+              </span>
+
+            </div>
+
+            <span className="text-slate-500">
+              {showUpcoming
+                ? "−"
+                : "+"}
+            </span>
+
+          </button>
+
+          {showUpcoming && (
+            <div className="mt-4 space-y-2">
+
+              {upcomingCards.length === 0 ? (
+                <p className="text-slate-400">
+                  Δεν υπάρχουν επερχόμενες καρτέλες.
+                </p>
+              ) : (
+                upcomingCards.map(
+                  (
+                    customer,
+                    index
+                  ) => (
+                    <div
+                      key={index}
+                      onClick={() =>
+                        navigate(
+                          `/customers/${encodeURIComponent(
+                            customer.customer
+                          )}`
+                        )
+                      }
+                      className="
+                        bg-slate-800
+                        hover:bg-slate-700
+                        rounded-xl
+                        p-3
+                        cursor-pointer
+                        transition
+                      "
+                    >
+                      <div className="font-medium">
+                        {customer.customer}
+                      </div>
+
+                      <div className="text-sm text-slate-400">
                         {
-                          payment.date
+                          customer.nextCardDate
                         }
                       </div>
+
                     </div>
                   )
                 )
