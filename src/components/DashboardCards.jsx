@@ -1,6 +1,20 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function DashboardCards({
   records,
 }) {
+  const navigate = useNavigate();
+
+  const [showCards, setShowCards] =
+    useState(true);
+
+  const [showExpected, setShowExpected] =
+    useState(true);
+
+  const [showOverdue, setShowOverdue] =
+    useState(false);
+
   const today =
     new Date()
       .toISOString()
@@ -93,9 +107,7 @@ export default function DashboardCards({
           </p>
 
           <h2 className="text-4xl font-bold text-orange-500">
-            {
-              expectedPayments.length
-            }
+            {expectedPayments.length}
           </h2>
         </div>
 
@@ -127,117 +139,191 @@ export default function DashboardCards({
 
         <div className="bg-slate-900 border border-blue-700 rounded-3xl p-6">
 
-          <h3 className="text-xl font-bold text-blue-400 mb-3">
-            📨 Καρτέλες που
-            πρέπει να σταλούν
-            σήμερα
-          </h3>
-
-          {todayCards.length ===
-          0 ? (
-            <p>
-              Δεν υπάρχουν
-              καρτέλες σήμερα.
-            </p>
-          ) : (
-            todayCards.map(
-              (
-                customer,
-                index
-              ) => (
-                <p
-                  key={index}
-                >
-                  {
-                    customer.customer
-                  }
-                </p>
+          <button
+            onClick={() =>
+              setShowCards(
+                !showCards
               )
-            )
+            }
+            className="w-full flex justify-between items-center text-xl font-bold text-blue-400 mb-3"
+          >
+            <span>
+              📨 Καρτέλες που πρέπει να σταλούν σήμερα
+            </span>
+
+            <span>
+              {showCards
+                ? "▲"
+                : "▼"}
+            </span>
+          </button>
+
+          {showCards && (
+            <>
+              {todayCards.length === 0 ? (
+                <p>
+                  Δεν υπάρχουν
+                  καρτέλες σήμερα.
+                </p>
+              ) : (
+                todayCards.map(
+                  (
+                    customer,
+                    index
+                  ) => (
+                    <p
+                      key={index}
+                      onClick={() =>
+                        navigate(
+                          `/customers/${encodeURIComponent(
+                            customer.customer
+                          )}`
+                        )
+                      }
+                      className="cursor-pointer hover:text-blue-400 transition"
+                    >
+                      {
+                        customer.customer
+                      }
+                    </p>
+                  )
+                )
+              )}
+            </>
           )}
 
         </div>
 
         <div className="bg-slate-900 border border-orange-700 rounded-3xl p-6">
 
-          <h3 className="text-xl font-bold text-orange-400 mb-3">
-            ⏰ Αναμενόμενες
-            Πληρωμές
-          </h3>
-
-          {expectedPayments.length ===
-          0 ? (
-            <p>
-              Δεν υπάρχουν
-              αναμενόμενες
-              πληρωμές.
-            </p>
-          ) : (
-            expectedPayments.map(
-              (
-                payment,
-                index
-              ) => (
-                <p
-                  key={index}
-                >
-                  {
-                    payment.customer
-                  }
-                  {" - "}
-                  {formatMoney(
-                    payment.amount
-                  )}
-                  €
-                  {" - "}
-                  {
-                    payment.date
-                  }
-                </p>
+          <button
+            onClick={() =>
+              setShowExpected(
+                !showExpected
               )
-            )
+            }
+            className="w-full flex justify-between items-center text-xl font-bold text-orange-400 mb-3"
+          >
+            <span>
+              ⏰ Αναμενόμενες Πληρωμές
+            </span>
+
+            <span>
+              {showExpected
+                ? "▲"
+                : "▼"}
+            </span>
+          </button>
+
+          {showExpected && (
+            <>
+              {expectedPayments.length === 0 ? (
+                <p>
+                  Δεν υπάρχουν
+                  αναμενόμενες
+                  πληρωμές.
+                </p>
+              ) : (
+                expectedPayments.map(
+                  (
+                    payment,
+                    index
+                  ) => (
+                    <p
+                      key={index}
+                      onClick={() =>
+                        navigate(
+                          `/customers/${encodeURIComponent(
+                            payment.customer
+                          )}`
+                        )
+                      }
+                      className="cursor-pointer hover:text-orange-400 transition py-1"
+                    >
+                      {
+                        payment.customer
+                      }
+                      {" - "}
+                      {formatMoney(
+                        payment.amount
+                      )}
+                      €
+                      {" - "}
+                      {
+                        payment.date
+                      }
+                    </p>
+                  )
+                )
+              )}
+            </>
           )}
 
         </div>
 
         <div className="bg-slate-900 border border-red-700 rounded-3xl p-6">
 
-          <h3 className="text-xl font-bold text-red-500 mb-3">
-            🚨 Ληξιπρόθεσμες
-            Πληρωμές
-          </h3>
-
-          {overduePayments.length ===
-          0 ? (
-            <p>
-              Δεν υπάρχουν
-              ληξιπρόθεσμες
-              πληρωμές.
-            </p>
-          ) : (
-            overduePayments.map(
-              (
-                payment,
-                index
-              ) => (
-                <p
-                  key={index}
-                >
-                  {
-                    payment.customer
-                  }
-                  {" - "}
-                  {formatMoney(
-                    payment.amount
-                  )}
-                  €
-                  {" - "}
-                  {
-                    payment.date
-                  }
-                </p>
+          <button
+            onClick={() =>
+              setShowOverdue(
+                !showOverdue
               )
-            )
+            }
+            className="w-full flex justify-between items-center text-xl font-bold text-red-500 mb-3"
+          >
+            <span>
+              🚨 Ληξιπρόθεσμες Πληρωμές
+            </span>
+
+            <span>
+              {showOverdue
+                ? "▲"
+                : "▼"}
+            </span>
+          </button>
+
+          {showOverdue && (
+            <>
+              {overduePayments.length === 0 ? (
+                <p>
+                  Δεν υπάρχουν
+                  ληξιπρόθεσμες
+                  πληρωμές.
+                </p>
+              ) : (
+                overduePayments.map(
+                  (
+                    payment,
+                    index
+                  ) => (
+                    <p
+                      key={index}
+                      onClick={() =>
+                        navigate(
+                          `/customers/${encodeURIComponent(
+                            payment.customer
+                          )}`
+                        )
+                      }
+                      className="cursor-pointer hover:text-red-400 transition py-1"
+                    >
+                      {
+                        payment.customer
+                      }
+                      {" - "}
+                      {formatMoney(
+                        payment.amount
+                      )}
+                      €
+                      {" - "}
+                      {
+                        payment.date
+                      }
+                    </p>
+                  )
+                )
+              )}
+            </>
           )}
 
         </div>
