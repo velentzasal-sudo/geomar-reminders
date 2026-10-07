@@ -9,11 +9,15 @@ export default function DashboardCards({
   const [showCards, setShowCards] =
     useState(true);
 
-  const [showExpected, setShowExpected] =
-    useState(true);
+  const [
+    showExpected,
+    setShowExpected,
+  ] = useState(true);
 
-  const [showOverdue, setShowOverdue] =
-    useState(false);
+  const [
+    showOverdue,
+    setShowOverdue,
+  ] = useState(false);
 
   const today =
     new Date()
@@ -88,45 +92,44 @@ export default function DashboardCards({
 
   return (
     <>
-
       <div className="grid md:grid-cols-4 gap-4 mb-8">
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <p className="text-slate-400">
-            📨 Καρτέλες Σήμερα
+        <div className="bg-slate-900 rounded-3xl p-6">
+          <p className="text-slate-400 text-sm">
+            Καρτέλες Σήμερα
           </p>
 
-          <h2 className="text-4xl font-bold text-blue-500">
+          <h2 className="text-3xl font-bold mt-2">
             {todayCards.length}
           </h2>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <p className="text-slate-400">
-            ⏰ Αναμενόμενες
+        <div className="bg-slate-900 rounded-3xl p-6">
+          <p className="text-slate-400 text-sm">
+            Αναμενόμενες
           </p>
 
-          <h2 className="text-4xl font-bold text-orange-500">
+          <h2 className="text-3xl font-bold mt-2">
             {expectedPayments.length}
           </h2>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <p className="text-slate-400">
+        <div className="bg-slate-900 rounded-3xl p-6">
+          <p className="text-slate-400 text-sm">
             Πελάτες
           </p>
 
-          <h2 className="text-4xl font-bold text-green-500">
+          <h2 className="text-3xl font-bold mt-2">
             {totalCustomers}
           </h2>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6">
-          <p className="text-slate-400">
+        <div className="bg-slate-900 rounded-3xl p-6">
+          <p className="text-slate-400 text-sm">
             Σύνολο €
           </p>
 
-          <h2 className="text-4xl font-bold text-cyan-500">
+          <h2 className="text-3xl font-bold mt-2">
             {formatMoney(
               totalAmount
             )}
@@ -137,7 +140,7 @@ export default function DashboardCards({
 
       <div className="space-y-4">
 
-        <div className="bg-slate-900 border border-blue-700 rounded-3xl p-6">
+        <div className="bg-slate-900 rounded-3xl p-5">
 
           <button
             onClick={() =>
@@ -145,25 +148,35 @@ export default function DashboardCards({
                 !showCards
               )
             }
-            className="w-full flex justify-between items-center text-xl font-bold text-blue-400 mb-3"
+            className="w-full flex justify-between items-center"
           >
-            <span>
-              📨 Καρτέλες που πρέπει να σταλούν σήμερα
-            </span>
+            <div className="flex items-center gap-3">
 
-            <span>
+              <span>📨</span>
+
+              <span className="font-semibold">
+                Καρτέλες Σήμερα
+              </span>
+
+              <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
+                {todayCards.length}
+              </span>
+
+            </div>
+
+            <span className="text-slate-500">
               {showCards
-                ? "▲"
-                : "▼"}
+                ? "−"
+                : "+"}
             </span>
           </button>
 
           {showCards && (
-            <>
+            <div className="mt-4 space-y-2">
+
               {todayCards.length === 0 ? (
-                <p>
-                  Δεν υπάρχουν
-                  καρτέλες σήμερα.
+                <p className="text-slate-400">
+                  Δεν υπάρχουν καρτέλες σήμερα.
                 </p>
               ) : (
                 todayCards.map(
@@ -171,7 +184,7 @@ export default function DashboardCards({
                     customer,
                     index
                   ) => (
-                    <p
+                    <div
                       key={index}
                       onClick={() =>
                         navigate(
@@ -180,21 +193,20 @@ export default function DashboardCards({
                           )}`
                         )
                       }
-                      className="cursor-pointer hover:text-blue-400 transition"
+                      className="bg-slate-800 hover:bg-slate-700 rounded-xl p-3 cursor-pointer transition"
                     >
-                      {
-                        customer.customer
-                      }
-                    </p>
+                      {customer.customer}
+                    </div>
                   )
                 )
               )}
-            </>
+
+            </div>
           )}
 
         </div>
 
-        <div className="bg-slate-900 border border-orange-700 rounded-3xl p-6">
+        <div className="bg-slate-900 rounded-3xl p-5">
 
           <button
             onClick={() =>
@@ -202,26 +214,37 @@ export default function DashboardCards({
                 !showExpected
               )
             }
-            className="w-full flex justify-between items-center text-xl font-bold text-orange-400 mb-3"
+            className="w-full flex justify-between items-center"
           >
-            <span>
-              ⏰ Αναμενόμενες Πληρωμές
-            </span>
+            <div className="flex items-center gap-3">
 
-            <span>
+              <span>⏰</span>
+
+              <span className="font-semibold">
+                Αναμενόμενες Πληρωμές
+              </span>
+
+              <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
+                {
+                  expectedPayments.length
+                }
+              </span>
+
+            </div>
+
+            <span className="text-slate-500">
               {showExpected
-                ? "▲"
-                : "▼"}
+                ? "−"
+                : "+"}
             </span>
           </button>
 
           {showExpected && (
-            <>
+            <div className="mt-4 space-y-2">
+
               {expectedPayments.length === 0 ? (
-                <p>
-                  Δεν υπάρχουν
-                  αναμενόμενες
-                  πληρωμές.
+                <p className="text-slate-400">
+                  Δεν υπάρχουν αναμενόμενες πληρωμές.
                 </p>
               ) : (
                 expectedPayments.map(
@@ -229,7 +252,7 @@ export default function DashboardCards({
                     payment,
                     index
                   ) => (
-                    <p
+                    <div
                       key={index}
                       onClick={() =>
                         navigate(
@@ -238,30 +261,35 @@ export default function DashboardCards({
                           )}`
                         )
                       }
-                      className="cursor-pointer hover:text-orange-400 transition py-1"
+                      className="bg-slate-800 hover:bg-slate-700 rounded-xl p-3 cursor-pointer transition"
                     >
-                      {
-                        payment.customer
-                      }
-                      {" - "}
-                      {formatMoney(
-                        payment.amount
-                      )}
-                      €
-                      {" - "}
-                      {
-                        payment.date
-                      }
-                    </p>
+                      <div className="font-medium">
+                        {
+                          payment.customer
+                        }
+                      </div>
+
+                      <div className="text-sm text-slate-400">
+                        {formatMoney(
+                          payment.amount
+                        )}
+                        €
+                        {" • "}
+                        {
+                          payment.date
+                        }
+                      </div>
+                    </div>
                   )
                 )
               )}
-            </>
+
+            </div>
           )}
 
         </div>
 
-        <div className="bg-slate-900 border border-red-700 rounded-3xl p-6">
+        <div className="bg-slate-900 rounded-3xl p-5">
 
           <button
             onClick={() =>
@@ -269,26 +297,37 @@ export default function DashboardCards({
                 !showOverdue
               )
             }
-            className="w-full flex justify-between items-center text-xl font-bold text-red-500 mb-3"
+            className="w-full flex justify-between items-center"
           >
-            <span>
-              🚨 Ληξιπρόθεσμες Πληρωμές
-            </span>
+            <div className="flex items-center gap-3">
 
-            <span>
+              <span>🚨</span>
+
+              <span className="font-semibold">
+                Ληξιπρόθεσμες Πληρωμές
+              </span>
+
+              <span className="bg-slate-800 text-slate-400 text-xs px-2 py-1 rounded-full">
+                {
+                  overduePayments.length
+                }
+              </span>
+
+            </div>
+
+            <span className="text-slate-500">
               {showOverdue
-                ? "▲"
-                : "▼"}
+                ? "−"
+                : "+"}
             </span>
           </button>
 
           {showOverdue && (
-            <>
+            <div className="mt-4 space-y-2">
+
               {overduePayments.length === 0 ? (
-                <p>
-                  Δεν υπάρχουν
-                  ληξιπρόθεσμες
-                  πληρωμές.
+                <p className="text-slate-400">
+                  Δεν υπάρχουν ληξιπρόθεσμες πληρωμές.
                 </p>
               ) : (
                 overduePayments.map(
@@ -296,7 +335,7 @@ export default function DashboardCards({
                     payment,
                     index
                   ) => (
-                    <p
+                    <div
                       key={index}
                       onClick={() =>
                         navigate(
@@ -305,31 +344,35 @@ export default function DashboardCards({
                           )}`
                         )
                       }
-                      className="cursor-pointer hover:text-red-400 transition py-1"
+                      className="bg-slate-800 hover:bg-slate-700 rounded-xl p-3 cursor-pointer transition"
                     >
-                      {
-                        payment.customer
-                      }
-                      {" - "}
-                      {formatMoney(
-                        payment.amount
-                      )}
-                      €
-                      {" - "}
-                      {
-                        payment.date
-                      }
-                    </p>
+                      <div className="font-medium">
+                        {
+                          payment.customer
+                        }
+                      </div>
+
+                      <div className="text-sm text-slate-400">
+                        {formatMoney(
+                          payment.amount
+                        )}
+                        €
+                        {" • "}
+                        {
+                          payment.date
+                        }
+                      </div>
+                    </div>
                   )
                 )
               )}
-            </>
+
+            </div>
           )}
 
         </div>
 
       </div>
-
     </>
   );
 }
