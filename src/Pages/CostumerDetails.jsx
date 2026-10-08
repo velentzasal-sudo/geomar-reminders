@@ -404,13 +404,6 @@ const deleteExpectedPayment =
   {customer.nextCardDate || "Δεν ορίστηκε"}
 </div>
 
-          <div className="bg-blue-600 px-4 py-2 rounded-xl">
-            📨 Καρτέλα:
-            {" "}
-            {customer.nextCardDate ||
-              "Δεν ορίστηκε"}
-          </div>
-
         </div>
 
         <div className="bg-slate-800 rounded-xl p-4 mt-4">

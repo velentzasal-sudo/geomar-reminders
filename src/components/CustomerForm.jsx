@@ -383,139 +383,152 @@ setRecords(mappedCustomers);
               : "⬇ Φθίνουσα"}
           </button>
         </div>
+<div className="overflow-x-auto">
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-3">
-          {[...records]
-            .filter((customerData) =>
-              (
-                customerData.customer ||
-                ""
-              )
-                .toLowerCase()
-                .includes(
-                  search.toLowerCase()
-                )
+  <table className="w-full text-sm">
+
+    <thead>
+
+      <tr className="border-b border-slate-700 text-slate-400">
+
+        <th className="text-left p-3">
+          Πελάτης
+        </th>
+
+        <th className="text-left p-3">
+          Υπόλοιπο
+        </th>
+
+        <th className="text-left p-3">
+          Καρτέλα
+        </th>
+
+        <th className="text-left p-3">
+          Πληρωμές
+        </th>
+
+        <th className="text-left p-3">
+          Σημειώσεις
+        </th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      {[...records]
+        .filter((customerData) =>
+          (
+            customerData.customer ||
+            ""
+          )
+            .toLowerCase()
+            .includes(
+              search.toLowerCase()
             )
-            .sort((a, b) => {
-              let result = 0;
+        )
+        .sort((a, b) => {
+          let result = 0;
 
-              if (sortType === "name") {
-                result =
-                  a.customer.localeCompare(
-                    b.customer,
-                    "el"
-                  );
+          if (sortType === "name") {
+            result =
+              a.customer.localeCompare(
+                b.customer,
+                "el"
+              );
+          }
+
+          if (sortType === "debt") {
+            result =
+              Number(
+                a.totalDebt || 0
+              ) -
+              Number(
+                b.totalDebt || 0
+              );
+          }
+
+          if (
+            sortType ===
+            "remaining"
+          ) {
+            result =
+              Number(
+                a.totalDebt || 0
+              ) -
+              Number(
+                b.totalDebt || 0
+              );
+          }
+
+          return sortDirection ===
+            "asc"
+            ? result
+            : -result;
+        })
+        .map(
+          (
+            customerData,
+            index
+          ) => (
+            <tr
+              key={index}
+              onClick={() =>
+                navigate(
+                  `/customers/${encodeURIComponent(
+                    customerData.customer
+                  )}`
+                )
               }
+              className="
+                border-b
+                border-slate-800
+                hover:bg-slate-800
+                cursor-pointer
+                transition
+              "
+            >
 
-              if (sortType === "debt") {
-                result =
-                  Number(
-                    a.totalDebt || 0
-                  ) -
-                  Number(
-                    b.totalDebt || 0
-                  );
-              }
+              <td className="p-3 font-medium">
+                {
+                  customerData.customer
+                }
+              </td>
 
-              if (
-                sortType ===
-                "remaining"
-              ) {
-                const paidA =
-                  (
-                    a.payments || []
-                  ).reduce(
-                    (sum, p) =>
-                      sum +
-                      Number(
-                        p.amount || 0
-                      ),
-                    0
-                  );
+              <td className="p-3">
+                {formatMoney(
+                  customerData.totalDebt
+                )}
+                €
+              </td>
 
-                const paidB =
-                  (
-                    b.payments || []
-                  ).reduce(
-                    (sum, p) =>
-                      sum +
-                      Number(
-                        p.amount || 0
-                      ),
-                    0
-                  );
+              <td className="p-3">
+                {customerData.nextCardDate ||
+                  "-"}
+              </td>
 
-                result =
-                  (Number(
-                    a.totalDebt || 0
-                  ) -
-                    paidA) -
-                  (Number(
-                    b.totalDebt || 0
-                  ) -
-                    paidB);
-              }
+              <td className="p-3">
+                {customerData
+                  .payments
+                  ?.length || 0}
+              </td>
 
-              return sortDirection ===
-                "asc"
-                ? result
-                : -result;
-            })
-            .map(
-              (
-                customerData,
-                index
-              ) => (
-                <div
-                  key={index}
-                  onClick={() =>
-                    navigate(
-                      `/customers/${encodeURIComponent(
-                        customerData.customer
-                      )}`
-                    )
-                  }
-                  className="bg-slate-800 rounded-xl p-4 cursor-pointer hover:bg-slate-700 transition"
-                >
-                  <h4 className="font-bold text-sm mb-2">
-                    {
-                      customerData.customer
-                    }
-                  </h4>
+              <td className="p-3 text-slate-400 max-w-xs truncate">
+                {customerData.notes ||
+                  "-"}
+              </td>
 
-                  <p className="text-sm">
-                    💸{" "}
-                    {formatMoney(
-                      customerData.totalDebt
-                    )}
-                    €
-                  </p>
+            </tr>
+          )
+        )}
 
-                  <p className="text-sm">
-                    📨{" "}
-                    {customerData.nextCardDate ||
-                      "-"}
-                  </p>
+    </tbody>
 
-                  <p className="text-sm">
-                    💳{" "}
-                    {customerData
-                      .payments
-                      ?.length || 0}
-                  </p>
+  </table>
 
-                  <p className="text-xs text-slate-400 mt-2 truncate">
-                    📝{" "}
-                    {(
-                      customerData.notes ||
-                      "-"
-                    ).slice(0, 40)}
-                  </p>
-                </div>
-              )
-            )}
+</div>              
         </div>
       </div>
-    </div>
-  );
+    );
 }
