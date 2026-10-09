@@ -85,8 +85,11 @@ export default function DashboardCards({
 
   return (
     <>
-   
-
+   <div className="mb-6">
+  <h2 className="text-slate-400 text-sm uppercase tracking-wider">
+    To do list
+  </h2>
+</div>
   <p className="text-slate-400 mt-2">
     Παρακολούθηση πληρωμών και καρτελών.
   </p>
