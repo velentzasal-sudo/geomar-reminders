@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
@@ -146,9 +145,7 @@ const clearNote = async () => {
 
   setNote("");
 };
-useEffect(() => {
-  loadNote();
-}, []);
+
   return (
     <>
  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
@@ -160,9 +157,6 @@ useEffect(() => {
   <textarea
     rows={4}
     value={note}
-    onChange={(e) =>
-      setNote(e.target.value)
-    }
     placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
     className="
       w-full
@@ -207,41 +201,6 @@ useEffect(() => {
     </button>
 
   </div>
-
-</div>
-
-  <p className="text-xs text-slate-500 mt-2">
-    Προσωρινή σημείωση dashboard.
-  </p>
-  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
-
-  <h2 className="text-xl font-bold mb-3">
-    📝 Σημείωση για Αύριο
-  </h2>
-
-  <textarea
-    rows={4}
-    value={note}
-    onChange={(e) =>
-      saveNote(e.target.value)
-    }
-    placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
-    className="
-      w-full
-      bg-slate-800
-      rounded-xl
-      p-4
-      outline-none
-      resize-none
-      text-white
-      placeholder:text-slate-500
-    "
-  />
-
-  <p className="text-xs text-slate-500 mt-2">
-    Αποθηκεύεται αυτόματα.
-  </p>
-
 </div>
           <div className="space-y-4">
 
