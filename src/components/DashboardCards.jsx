@@ -85,15 +85,12 @@ export default function DashboardCards({
 
   return (
     <>
-      <div className="mb-8">
-  <h1 className="text-5xl font-bold">
-    Dashboard
-  </h1>
+   
 
   <p className="text-slate-400 mt-2">
     Παρακολούθηση πληρωμών και καρτελών.
   </p>
-</div>
+
           <div className="space-y-4">
 
         <div className="bg-slate-900 rounded-3xl p-5">
