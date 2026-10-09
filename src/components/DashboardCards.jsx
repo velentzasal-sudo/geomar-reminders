@@ -85,13 +85,28 @@ export default function DashboardCards({
 
   return (
     <>
-  <div className="bg-slate-900 rounded-3xl p-6 mb-6">
-  <h2 className="text-xl font-bold">
-    📋 To do list
+ <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
+  <h2 className="text-xl font-bold mb-3">
+    📝 Σημείωση για Αύριο
   </h2>
 
-  <p className="text-slate-400 mt-1">
-    Πληρωμές και καρτέλες που χρειάζονται ενέργεια.
+  <textarea
+    rows={4}
+    placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς αύριο..."
+    className="
+      w-full
+      bg-slate-800
+      rounded-xl
+      p-4
+      outline-none
+      resize-none
+      text-white
+      placeholder:text-slate-500
+    "
+  />
+
+  <p className="text-xs text-slate-500 mt-2">
+    Προσωρινή σημείωση dashboard.
   </p>
 </div>
 
