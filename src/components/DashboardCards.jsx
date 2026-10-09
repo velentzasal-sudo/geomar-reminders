@@ -150,12 +150,12 @@ const clearNote = async () => {
     <>
  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
 
-  <h2 className="text-xl font-bold mb-3">
-    📝 Σημείωση για Αύριο
+  <h2 className="text-xl font-bold mb-4">
+    📌 Υπενθύμιση
   </h2>
 
   <textarea
-    rows={4}
+    rows={2}
     value={note}
     placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
     className="
@@ -170,7 +170,7 @@ const clearNote = async () => {
     "
   />
 
-  <div className="flex gap-3 mt-4">
+  <div className="flex justify-end gap-3 mt-4">
 
     <button
       onClick={saveNote}
