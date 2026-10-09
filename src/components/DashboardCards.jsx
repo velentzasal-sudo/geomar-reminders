@@ -85,14 +85,15 @@ export default function DashboardCards({
 
   return (
     <>
-   <div className="mb-6">
-  <h2 className="text-slate-400 text-sm uppercase tracking-wider">
-    To do list
+  <div className="bg-slate-900 rounded-3xl p-6 mb-6">
+  <h2 className="text-xl font-bold">
+    📋 To do list
   </h2>
-</div>
-  <p className="text-slate-400 mt-2">
-    Παρακολούθηση πληρωμών και καρτελών.
+
+  <p className="text-slate-400 mt-1">
+    Πληρωμές και καρτέλες που χρειάζονται ενέργεια.
   </p>
+</div>
 
           <div className="space-y-4">
 
@@ -114,20 +115,7 @@ export default function DashboardCards({
                 Αναμενόμενες Πληρωμές
               </span>
 
-              <span className="
-                bg-slate-800
-                text-slate-400
-                text-xs
-                px-2
-                py-1
-                rounded-full
-              ">
-                {
-                  expectedPayments.length
-                }
-              </span>
-
-            </div>
+                  </div>
 
             <span className="text-slate-500">
               {showExpected
