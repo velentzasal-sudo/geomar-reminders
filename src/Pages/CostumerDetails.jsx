@@ -185,28 +185,23 @@ const addPayment = async () => {
   await loadPayments();
 };
 
-  const deletePayment = async (
-  paymentId
-) => {
-  if (
-    !window.confirm(
-      "Διαγραφή πληρωμής;"
-    )
-  )
+ const deletePayment = async (paymentId) => {
+  if (!window.confirm("Διαγραφή πληρωμής;"))
     return;
 
-  const { error } =
-    await supabase
-      .from("payments")
-      .delete()
-      .eq("id", paymentId);
+  const { error } = await supabase
+    .from("payments")
+    .delete()
+    .eq("id", paymentId);
 
   if (error) {
     console.error(error);
     return;
   }
 
-  await loadPayments();
+  setPayments(prev =>
+    prev.filter(p => p.id !== paymentId)
+  );
 };
 const addExpectedPayment = async () => {
   if (
@@ -268,43 +263,46 @@ const addExpectedPayment = async () => {
   await loadExpectedPayments();
 };
 
-const completeExpectedPayment =
-  async (payment) => {
-    const { error: insertError } =
-      await supabase
-        .from("payments")
-        .insert([
-          {
-            customer_id:
-              customer.id,
-            amount:
-              payment.amount,
-            payment_date:
-              payment.date,
-          },
-        ]);
+const completeExpectedPayment = async (payment) => {
+  const { error: insertError } = await supabase
+    .from("payments")
+    .insert([
+      {
+        customer_id: customer.id,
+        amount: payment.amount,
+        payment_date: payment.date,
+      },
+    ]);
 
-    if (insertError) {
-      console.error(insertError);
-      return;
-    }
+  if (insertError) {
+    console.error(insertError);
+    return;
+  }
 
-    const { error: deleteError } =
-      await supabase
-        .from(
-          "expected_payments"
-        )
-        .delete()
-        .eq("id", payment.id);
+  const { error: deleteError } = await supabase
+    .from("expected_payments")
+    .delete()
+    .eq("id", payment.id);
 
-    if (deleteError) {
-      console.error(deleteError);
-      return;
-    }
+  if (deleteError) {
+    console.error(deleteError);
+    return;
+  }
 
-    await loadPayments();
-    await loadExpectedPayments();
-  };
+  setExpectedPayments(prev =>
+    prev.filter(p => p.id !== payment.id)
+  );
+
+  setPayments(prev => [
+    {
+      id: Date.now(),
+      amount: payment.amount,
+      date: payment.date,
+    },
+    ...prev,
+  ]);
+};
+
 const deleteExpectedPayment =
   async (paymentId) => {
     if (
