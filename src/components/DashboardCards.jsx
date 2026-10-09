@@ -87,11 +87,12 @@ export default function DashboardCards({
 const [note, setNote] = useState("");
 
 const loadNote = async () => {
-  const { data, error } = await supabase
-    .from("dashboard_notes")
-    .select("*")
-    .eq("id", 1)
-    .single();
+ const { data, error } = await supabase
+  .from("dashboard_notes")
+  .select("*")
+  .order("id")
+  .limit(1)
+  .maybeSingle();
 
   if (error) {
     console.error(error);
