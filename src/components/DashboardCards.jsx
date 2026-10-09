@@ -155,22 +155,22 @@ const clearNote = async () => {
     📌 Υπενθύμιση
   </h2>
 
-  <textarea
-    rows={2}
-    value={note}
-    placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
-    className="
-      w-full
-      bg-slate-800
-      rounded-xl
-      p-4
-      outline-none
-      resize-none
-      text-white
-      placeholder:text-slate-500
-    "
-  />
-
+ <textarea
+  rows={2}
+  value={note}
+  onChange={(e) => setNote(e.target.value)}
+  placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
+  className="
+    w-full
+    bg-slate-800
+    rounded-xl
+    p-4
+    outline-none
+    resize-none
+    text-white
+    placeholder:text-slate-500
+  "
+/>
   <div className="flex justify-end gap-3 mt-4">
 
     <button
