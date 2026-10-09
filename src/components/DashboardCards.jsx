@@ -86,27 +86,65 @@ export default function DashboardCards({
     );
 
 const [note, setNote] = useState("");
+
 const loadNote = async () => {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("dashboard_notes")
     .select("*")
     .eq("id", 1)
     .single();
 
+  if (error) {
+    console.error(error);
+    return;
+  }
+
   if (data) {
     setNote(data.note || "");
   }
 };
-const saveNote = async (value) => {
-  setNote(value);
 
-  await supabase
+useEffect(() => {
+  loadNote();
+}, []);
+
+const saveNote = async () => {
+  const { error } = await supabase
     .from("dashboard_notes")
     .update({
-      note: value,
+      note,
       updated_at: new Date(),
     })
     .eq("id", 1);
+
+  if (error) {
+    console.error(error);
+    alert("Σφάλμα αποθήκευσης");
+    return;
+  }
+
+  alert("✅ Αποθηκεύτηκε");
+};
+
+const clearNote = async () => {
+  if (!window.confirm("Διαγραφή σημείωσης;"))
+    return;
+
+  const { error } = await supabase
+    .from("dashboard_notes")
+    .update({
+      note: "",
+      updated_at: new Date(),
+    })
+    .eq("id", 1);
+
+  if (error) {
+    console.error(error);
+    alert("Σφάλμα διαγραφής");
+    return;
+  }
+
+  setNote("");
 };
 useEffect(() => {
   loadNote();
@@ -114,13 +152,18 @@ useEffect(() => {
   return (
     <>
  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
+
   <h2 className="text-xl font-bold mb-3">
     📝 Σημείωση για Αύριο
   </h2>
 
   <textarea
     rows={4}
-    placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς αύριο..."
+    value={note}
+    onChange={(e) =>
+      setNote(e.target.value)
+    }
+    placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
     className="
       w-full
       bg-slate-800
@@ -132,6 +175,40 @@ useEffect(() => {
       placeholder:text-slate-500
     "
   />
+
+  <div className="flex gap-3 mt-4">
+
+    <button
+      onClick={saveNote}
+      className="
+        bg-cyan-600
+        hover:bg-cyan-700
+        px-5
+        py-2
+        rounded-xl
+        font-semibold
+      "
+    >
+      💾 Αποθήκευση
+    </button>
+
+    <button
+      onClick={clearNote}
+      className="
+        bg-red-600
+        hover:bg-red-700
+        px-5
+        py-2
+        rounded-xl
+        font-semibold
+      "
+    >
+      🗑 Διαγραφή
+    </button>
+
+  </div>
+
+</div>
 
   <p className="text-xs text-slate-500 mt-2">
     Προσωρινή σημείωση dashboard.
@@ -165,7 +242,6 @@ useEffect(() => {
     Αποθηκεύεται αυτόματα.
   </p>
 
-</div>
 </div>
           <div className="space-y-4">
 
