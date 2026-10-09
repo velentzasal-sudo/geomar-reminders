@@ -128,66 +128,50 @@ if (!customer) {
       }
     );
 
- const totalPaid =
-  payments.reduce(
-    (sum, payment) =>
-      sum +
-      Number(payment.amount || 0),
-    0
-  );
+ const totalPaid = payments.reduce(
+  (sum, payment) =>
+    sum + Number(payment.amount || 0),
+  0
+);
 
 const remainingDebt =
-  Number(customer.totalDebt || 0);
+  Number(customer.totalDebt || 0) -
+  totalPaid;
 
 const addPayment = async () => {
-  if (
-    !paymentAmount ||
-    !paymentDate
-  )
-    return;
-console.log(customer);
-  const { error } =
-    await supabase
-      .from("payments")
-      
-      .insert([
-        {
-          customer_id:
-            customer.id,
-          amount: Number(
-            paymentAmount
-          ),
-          payment_date:
-            paymentDate,
-        },
-      ]);
+  if (!paymentAmount || !paymentDate) return;
+
+  const amount = Number(paymentAmount);
+
+  const { error } = await supabase
+    .from("payments")
+    .insert([
+      {
+        customer_id: customer.id,
+        amount,
+        payment_date: paymentDate,
+      },
+    ]);
 
   if (error) {
-  console.error(error);
-  alert(JSON.stringify(error));
-  return;
-}
+    console.error(error);
+    alert(JSON.stringify(error));
+    return;
+  }
 
   const updated = [...records];
 
-  const customerIndex =
-    records.findIndex(
-      (c) =>
-        c.customer ===
-        customer.customer
-    );
+  const customerIndex = records.findIndex(
+    (c) => c.id === customer.id
+  );
 
   updated[customerIndex] = {
     ...updated[customerIndex],
 
     payments: [
-      ...(updated[customerIndex]
-        .payments || []),
-
+      ...(updated[customerIndex].payments || []),
       {
-        amount: Number(
-          paymentAmount
-        ),
+        amount,
         date: paymentDate,
       },
     ],
@@ -197,6 +181,7 @@ console.log(customer);
 
   setPaymentAmount("");
   setPaymentDate("");
+
   await loadPayments();
 };
 
@@ -389,9 +374,9 @@ const deleteExpectedPayment =
 
         <div className="flex flex-wrap gap-3">
 
-         <div className="bg-orange-500 px-4 py-2 rounded-xl">
+      <div className="bg-orange-500 px-4 py-2 rounded-xl">
   💸 Τρέχον Υπόλοιπο:
-  {formatMoney(customer.totalDebt)} €
+  {formatMoney(remainingDebt)} €
 </div>
 
 <div className="bg-green-600 px-4 py-2 rounded-xl">
