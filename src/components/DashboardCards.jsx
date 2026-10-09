@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
 
 export default function DashboardCards({
   records,
@@ -83,6 +85,32 @@ export default function DashboardCards({
           }))
     );
 
+const [note, setNote] = useState("");
+const loadNote = async () => {
+  const { data } = await supabase
+    .from("dashboard_notes")
+    .select("*")
+    .eq("id", 1)
+    .single();
+
+  if (data) {
+    setNote(data.note || "");
+  }
+};
+const saveNote = async (value) => {
+  setNote(value);
+
+  await supabase
+    .from("dashboard_notes")
+    .update({
+      note: value,
+      updated_at: new Date(),
+    })
+    .eq("id", 1);
+};
+useEffect(() => {
+  loadNote();
+}, []);
   return (
     <>
  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
@@ -108,8 +136,37 @@ export default function DashboardCards({
   <p className="text-xs text-slate-500 mt-2">
     Προσωρινή σημείωση dashboard.
   </p>
-</div>
+  <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 mb-6">
 
+  <h2 className="text-xl font-bold mb-3">
+    📝 Σημείωση για Αύριο
+  </h2>
+
+  <textarea
+    rows={4}
+    value={note}
+    onChange={(e) =>
+      saveNote(e.target.value)
+    }
+    placeholder="Γράψε εδώ ότι πρέπει να θυμηθείς..."
+    className="
+      w-full
+      bg-slate-800
+      rounded-xl
+      p-4
+      outline-none
+      resize-none
+      text-white
+      placeholder:text-slate-500
+    "
+  />
+
+  <p className="text-xs text-slate-500 mt-2">
+    Αποθηκεύεται αυτόματα.
+  </p>
+
+</div>
+</div>
           <div className="space-y-4">
 
         <div className="bg-slate-900 rounded-3xl p-5">
