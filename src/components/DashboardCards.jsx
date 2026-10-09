@@ -87,21 +87,18 @@ export default function DashboardCards({
 const [note, setNote] = useState("");
 
 const loadNote = async () => {
- const { data, error } = await supabase
-  .from("dashboard_notes")
-  .select("*")
-  .order("id")
-  .limit(1)
-  .maybeSingle();
+  const { data, error } = await supabase
+    .from("dashboard_notes")
+    .select("note")
+    .eq("id", 1)
+    .single();
 
   if (error) {
     console.error(error);
     return;
   }
 
-  if (data) {
-    setNote(data.note || "");
-  }
+  setNote(data.note || "");
 };
 
 useEffect(() => {
@@ -112,19 +109,18 @@ const saveNote = async () => {
   const { error } = await supabase
     .from("dashboard_notes")
     .update({
-      note,
-      updated_at: new Date(),
+      note: note,
     })
     .eq("id", 1);
 
   if (error) {
     console.error(error);
-    alert("Σφάλμα αποθήκευσης");
     return;
   }
 
   alert("✅ Αποθηκεύτηκε");
 };
+
 
 const clearNote = async () => {
   if (!window.confirm("Διαγραφή σημείωσης;"))
