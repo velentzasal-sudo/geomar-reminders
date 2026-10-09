@@ -85,51 +85,16 @@ export default function DashboardCards({
 
   return (
     <>
-      <div className="grid md:grid-cols-4 gap-4 mb-8">
+      <div className="mb-8">
+  <h1 className="text-5xl font-bold">
+    Dashboard
+  </h1>
 
-        <div className="bg-slate-900 rounded-3xl p-6">
-          <p className="text-slate-400 text-sm">
-            Αναμενόμενες
-          </p>
-
-          <h2 className="text-3xl font-bold mt-2">
-            {expectedPayments.length}
-          </h2>
-        </div>
-
-        <div className="bg-slate-900 rounded-3xl p-6">
-          <p className="text-slate-400 text-sm">
-            Καρτέλες
-          </p>
-
-          <h2 className="text-3xl font-bold mt-2">
-            {upcomingCards.length}
-          </h2>
-        </div>
-
-        <div className="bg-slate-900 rounded-3xl p-6">
-          <p className="text-slate-400 text-sm">
-            Πελάτες
-          </p>
-
-          <h2 className="text-3xl font-bold mt-2">
-            {totalCustomers}
-          </h2>
-        </div>
-
-        <div className="bg-slate-900 rounded-3xl p-6">
-          <p className="text-slate-400 text-sm">
-            Σύνολο €
-          </p>
-
-          <h2 className="text-3xl font-bold mt-2">
-            {formatMoney(totalAmount)}
-          </h2>
-        </div>
-
-      </div>
-
-      <div className="space-y-4">
+  <p className="text-slate-400 mt-2">
+    Παρακολούθηση πληρωμών και καρτελών.
+  </p>
+</div>
+          <div className="space-y-4">
 
         <div className="bg-slate-900 rounded-3xl p-5">
 
