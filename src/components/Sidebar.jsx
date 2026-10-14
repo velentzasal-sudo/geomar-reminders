@@ -52,6 +52,13 @@ export default function Sidebar() {
   <span className="text-xl">🏭</span>
   <span>Αποστολέας</span>
 </Link>
+<Link
+  to="/carriers"
+  className={linkClass("/carriers")}
+>
+  <span className="text-xl">🚛</span>
+  <span>Μεταφορείς</span>
+</Link>
         <Link
           to="/calendar"
           className={linkClass("/calendar")}

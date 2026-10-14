@@ -12,6 +12,8 @@ import Loads from "./Pages/Loads";
 import NewLoad from "./Pages/NewLoad";
 import LoadDetails from "./Pages/LoadDetails";
 import Suppliers from "./Pages/Suppliers";
+import Carriers from "./Pages/Carriers";
+
 function App() {
   const [records, setRecords] =
     useState([]);
@@ -151,6 +153,11 @@ console.log("EXPECTED", expectedPayments);
         <main className="flex-1 p-8">
 
           <Routes>
+<Route
+  path="/carriers"
+  element={<Carriers />}
+/>
+            
             <Route
   path="/suppliers"
   element={<Suppliers />}
