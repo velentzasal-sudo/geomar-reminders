@@ -5,16 +5,17 @@ import { supabase } from "../lib/supabase";
 export default function NewLoad() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    load_number: "",
-    supplier_name: "",
-    customer_name: "",
-    carrier_name: "",
-    truck_registration: "",
-    eur_pallets: 0,
-    industrial_pallets: 0,
-    status: "Planning",
-  });
+const [form, setForm] = useState({
+  load_number: "",
+  supplier_name: "",
+  customer_name: "",
+  carrier_name: "",
+  truck_registration: "",
+  eur_pallets: 0,
+  industrial_pallets: 0,
+  load_date: "",
+  status: "Planning",
+});
 
   const loadingUnits =
     Number(form.eur_pallets) +
@@ -131,6 +132,23 @@ export default function NewLoad() {
             }
           />
         </div>
+<div>
+  <label className="block text-slate-300 mb-2">
+    Ημερομηνία Φορτίου
+  </label>
+
+  <input
+    type="date"
+    className="w-full p-3 rounded-xl bg-slate-800 text-white"
+    value={form.load_date}
+    onChange={(e) =>
+      setForm({
+        ...form,
+        load_date: e.target.value,
+      })
+    }
+  />
+</div>
 
         <div className="bg-slate-800 rounded-xl p-4">
           <p className="text-slate-300">

@@ -153,6 +153,15 @@ export default function Loads() {
                     €{load.profit || 0}
                   </p>
                 </div>
+                <div>
+  <p className="text-slate-400 text-sm">
+    Ημερομηνία
+  </p>
+
+  <p className="text-white font-bold">
+    {load.load_date || "-"}
+  </p>
+</div>
               </div>
             </div>
           ))}
