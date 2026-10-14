@@ -38,14 +38,14 @@ export default function Suppliers() {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-white">
-          🏭 Προμηθευτές
+          🏭 Αποστολέας
         </h1>
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-6">
 
         <label className="block text-slate-300 mb-2">
-          Όνομα Προμηθευτή
+          Όνομα Αποστολέα
         </label>
 
         <div className="flex gap-3">
