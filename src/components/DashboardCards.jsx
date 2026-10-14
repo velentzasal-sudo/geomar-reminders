@@ -196,7 +196,20 @@ const clearNote = async () => {
     >
       🗑 Διαγραφή
     </button>
+<div
+  onClick={() => navigate("/loads")}
+  className="bg-white rounded-xl shadow p-6 cursor-pointer hover:shadow-lg transition"
+>
+  <div className="text-3xl mb-2">🚚</div>
 
+  <h3 className="text-lg font-semibold">
+    Φορτία
+  </h3>
+
+  <p className="text-gray-500">
+    Διαχείριση φορτίων και παλετών
+  </p>
+</div>
   </div>
 </div>
           <div className="space-y-4">

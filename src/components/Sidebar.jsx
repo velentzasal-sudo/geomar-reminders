@@ -85,8 +85,9 @@ export default function Sidebar() {
         </div>
 
       </div>
-<Link to="/loads">Φορτία</Link>
+<Link to="/loads">🚚 Φορτία</Link>
     </aside>
+    
   );
 }
 ``
