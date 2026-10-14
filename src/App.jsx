@@ -8,6 +8,8 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./Pages/Dashboard";
 import Customers from "./Pages/Customers";
 import Calendar from "./Pages/Calendar";
+import Loads from "./Pages/Loads";
+import NewLoad from "./Pages/NewLoad";
 
 function App() {
   const [records, setRecords] =
@@ -186,6 +188,9 @@ console.log("EXPECTED", expectedPayments);
                 />
               }
             />
+            <Route path="/loads" element={<Loads />} />
+            <Route path="/loads/new" element={<NewLoad />} />
+
 
           </Routes>
 
