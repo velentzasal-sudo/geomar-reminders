@@ -48,7 +48,51 @@ export default function Carriers() {
 
     fetchCarriers();
   }
+const [editingId, setEditingId] = useState(null);
+async function updateCarrier() {
+  const { error } = await supabase
+    .from("carriers")
+    .update({
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
+      notes: form.notes,
+    })
+    .eq("id", editingId);
 
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  setEditingId(null);
+
+  setForm({
+    name: "",
+    phone: "",
+    email: "",
+    notes: "",
+  });
+
+  fetchCarriers();
+}
+async function deleteCarrier(id) {
+  if (!confirm("Να διαγραφεί ο μεταφορέας;")) {
+    return;
+  }
+
+  const { error } = await supabase
+    .from("carriers")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  fetchCarriers();
+}
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold text-white mb-6">
@@ -128,47 +172,50 @@ export default function Carriers() {
 
         </div>
 
-        <button
-          onClick={saveCarrier}
-          className="
-            mt-5
-            bg-orange-500
-            hover:bg-orange-600
-            text-white
-            px-5
-            py-3
-            rounded-xl
-            font-semibold
-          "
-        >
-          Αποθήκευση
-        </button>
+       <button
+  onClick={
+    editingId
+      ? updateCarrier
+      : saveCarrier
+  }
+  className="
+    mt-5
+    bg-orange-500
+    hover:bg-orange-600
+    text-white
+    px-5
+    py-3
+    rounded-xl
+    font-semibold
+  "
+>
+  {editingId ? "Ενημέρωση" : "Αποθήκευση"}
+</button>
       </div>
 
       <div className="grid gap-3">
         {carriers.map((carrier) => (
           <div
-            key={carrier.id}
-            className="
-              bg-slate-900
-              border
-              border-slate-800
-              rounded-2xl
-              p-4
-            "
-          >
-            <h3 className="text-white font-semibold">
-              {carrier.name}
-            </h3>
+  key={carrier.id}
+  className="bg-slate-900 border border-slate-800 rounded-2xl p-4"
+>
+  <h3 className="text-white font-semibold">
+    {carrier.name}
+  </h3>
 
-            <p className="text-slate-400">
-              {carrier.phone}
-            </p>
+  <p className="text-slate-400">
+    {carrier.phone}
+  </p>
 
-            <p className="text-slate-400">
-              {carrier.email}
-            </p>
-          </div>
+  <p className="text-slate-400">
+    {carrier.email}
+  </p>
+
+  <div className="flex gap-2 mt-4">
+    ...
+  </div>
+
+</div>
         ))}
       </div>
     </div>
