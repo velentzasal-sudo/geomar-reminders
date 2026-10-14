@@ -191,7 +191,7 @@ console.log("EXPECTED", expectedPayments);
             />
             <Route path="/loads" element={<Loads />} />
             <Route path="/loads/new" element={<NewLoad />} />
-<Route path="/loads/:id" element={<LoadDetails />} />
+            <Route path="/loads/:id" element={<LoadDetails />} />
 
           </Routes>
 
