@@ -50,7 +50,7 @@ export default function Sidebar() {
   className={linkClass("/suppliers")}
 >
   <span className="text-xl">🏭</span>
-  <span>Προμηθευτές</span>
+  <span>Αποστολέας</span>
 </Link>
         <Link
           to="/calendar"
