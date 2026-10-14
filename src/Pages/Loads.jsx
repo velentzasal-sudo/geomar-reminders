@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
-
+import { useNavigate } from "react-router-dom";
 export default function Loads() {
   const [loads, setLoads] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,7 +8,7 @@ export default function Loads() {
   useEffect(() => {
     fetchLoads();
   }, []);
-
+const navigate = useNavigate();
   async function fetchLoads() {
     const { data, error } = await supabase
       .from("loads")
@@ -22,6 +22,7 @@ export default function Loads() {
   if (loading) return <p>Φόρτωση...</p>;
 
   return (
+    
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Φορτία</h1>
@@ -33,7 +34,11 @@ export default function Loads() {
           Νέο Φορτίο
         </button>
       </div>
-
+    <div
+  key={load.id}
+  onClick={() => navigate(`/loads/${load.id}`)}
+  className="border rounded-lg p-4 shadow bg-white cursor-pointer"
+></div>
       <div className="grid gap-4">
         {loads.map((load) => (
           <div
@@ -70,8 +75,10 @@ export default function Loads() {
               <p className="font-bold">
                 Κέρδος: €{load.profit}
               </p>
+              
             </div>
           </div>
+          
         ))}
       </div>
     </div>

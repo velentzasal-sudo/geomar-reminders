@@ -10,6 +10,7 @@ import Customers from "./Pages/Customers";
 import Calendar from "./Pages/Calendar";
 import Loads from "./Pages/Loads";
 import NewLoad from "./Pages/NewLoad";
+import LoadDetails from "./Pages/LoadDetails";
 
 function App() {
   const [records, setRecords] =
@@ -190,7 +191,7 @@ console.log("EXPECTED", expectedPayments);
             />
             <Route path="/loads" element={<Loads />} />
             <Route path="/loads/new" element={<NewLoad />} />
-
+<Route path="/loads/:id" element={<LoadDetails />} />
 
           </Routes>
 
