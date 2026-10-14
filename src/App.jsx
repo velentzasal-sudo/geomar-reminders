@@ -189,9 +189,9 @@ console.log("EXPECTED", expectedPayments);
                 />
               }
             />
-            <Route path="/loads" element={<Loads />} />
-            <Route path="/loads/new" element={<NewLoad />} />
-            <Route path="/loads/:id" element={<LoadDetails />} />
+            <Route path="/Loads" element={<Loads />} />
+            <Route path="/Loads/new" element={<NewLoad />} />
+            <Route path="/Loads/:id" element={<LoadDetails />} />
 
           </Routes>
 
