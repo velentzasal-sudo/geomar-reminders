@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase";
 
 export default function Carriers() {
   const [carriers, setCarriers] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -16,10 +17,15 @@ export default function Carriers() {
   }, []);
 
   async function fetchCarriers() {
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from("carriers")
       .select("*")
       .order("name");
+
+    if (error) {
+      console.error(error);
+      return;
+    }
 
     setCarriers(data || []);
   }
@@ -48,51 +54,53 @@ export default function Carriers() {
 
     fetchCarriers();
   }
-const [editingId, setEditingId] = useState(null);
-async function updateCarrier() {
-  const { error } = await supabase
-    .from("carriers")
-    .update({
-      name: form.name,
-      phone: form.phone,
-      email: form.email,
-      notes: form.notes,
-    })
-    .eq("id", editingId);
 
-  if (error) {
-    alert(error.message);
-    return;
+  async function updateCarrier() {
+    const { error } = await supabase
+      .from("carriers")
+      .update({
+        name: form.name,
+        phone: form.phone,
+        email: form.email,
+        notes: form.notes,
+      })
+      .eq("id", editingId);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    setEditingId(null);
+
+    setForm({
+      name: "",
+      phone: "",
+      email: "",
+      notes: "",
+    });
+
+    fetchCarriers();
   }
 
-  setEditingId(null);
+  async function deleteCarrier(id) {
+    if (!window.confirm("Να διαγραφεί ο μεταφορέας;")) {
+      return;
+    }
 
-  setForm({
-    name: "",
-    phone: "",
-    email: "",
-    notes: "",
-  });
+    const { error } = await supabase
+      .from("carriers")
+      .delete()
+      .eq("id", id);
 
-  fetchCarriers();
-}
-async function deleteCarrier(id) {
-  if (!confirm("Να διαγραφεί ο μεταφορέας;")) {
-    return;
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    fetchCarriers();
   }
 
-  const { error } = await supabase
-    .from("carriers")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  fetchCarriers();
-}
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold text-white mb-6">
@@ -172,50 +180,101 @@ async function deleteCarrier(id) {
 
         </div>
 
-       <button
-  onClick={
-    editingId
-      ? updateCarrier
-      : saveCarrier
-  }
-  className="
-    mt-5
-    bg-orange-500
-    hover:bg-orange-600
-    text-white
-    px-5
-    py-3
-    rounded-xl
-    font-semibold
-  "
->
-  {editingId ? "Ενημέρωση" : "Αποθήκευση"}
-</button>
+        <button
+          onClick={
+            editingId
+              ? updateCarrier
+              : saveCarrier
+          }
+          className="
+            mt-5
+            bg-orange-500
+            hover:bg-orange-600
+            text-white
+            px-5
+            py-3
+            rounded-xl
+            font-semibold
+          "
+        >
+          {editingId ? "Ενημέρωση" : "Αποθήκευση"}
+        </button>
       </div>
 
       <div className="grid gap-3">
         {carriers.map((carrier) => (
           <div
-  key={carrier.id}
-  className="bg-slate-900 border border-slate-800 rounded-2xl p-4"
->
-  <h3 className="text-white font-semibold">
-    {carrier.name}
-  </h3>
+            key={carrier.id}
+            className="
+              bg-slate-900
+              border
+              border-slate-800
+              rounded-2xl
+              p-4
+            "
+          >
+            <h3 className="text-white font-semibold text-lg">
+              {carrier.name}
+            </h3>
 
-  <p className="text-slate-400">
-    {carrier.phone}
-  </p>
+            <p className="text-slate-400">
+              📞 {carrier.phone || "-"}
+            </p>
 
-  <p className="text-slate-400">
-    {carrier.email}
-  </p>
+            <p className="text-slate-400">
+              📧 {carrier.email || "-"}
+            </p>
 
-  <div className="flex gap-2 mt-4">
-    ...
-  </div>
+            {carrier.notes && (
+              <p className="text-slate-500 mt-2">
+                {carrier.notes}
+              </p>
+            )}
 
-</div>
+            <div className="flex gap-2 mt-4">
+              <button
+                onClick={() => {
+                  setEditingId(carrier.id);
+
+                  setForm({
+                    name: carrier.name || "",
+                    phone: carrier.phone || "",
+                    email: carrier.email || "",
+                    notes: carrier.notes || "",
+                  });
+
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+                className="
+                  px-3
+                  py-2
+                  bg-blue-600
+                  hover:bg-blue-700
+                  rounded-lg
+                  text-white
+                "
+              >
+                ✏️ Επεξεργασία
+              </button>
+
+              <button
+                onClick={() => deleteCarrier(carrier.id)}
+                className="
+                  px-3
+                  py-2
+                  bg-red-600
+                  hover:bg-red-700
+                  rounded-lg
+                  text-white
+                "
+              >
+                🗑️ Διαγραφή
+              </button>
+            </div>
+          </div>
         ))}
       </div>
     </div>
