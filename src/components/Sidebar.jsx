@@ -53,7 +53,13 @@ export default function Sidebar() {
           <span className="text-xl">📅</span>
           <span>Ημερολόγιο</span>
         </Link>
-<Link to="/loads">🚚 Φορτία</Link>
+       <Link
+    to="/loads"
+    className={linkClass("/loads")}
+  >
+    <span className="text-xl">🚚</span>
+    <span>Φορτία</span>
+  </Link>
       </nav>
 
       <div className="mt-auto p-4 border-t border-slate-800">
